@@ -9,6 +9,7 @@ pygame.init()
 WHITE=(255,255,255)
 RED=(255,0,00)
 GREEN=(0,255,0)
+BLUE=(0,0,255)
 
 size=[400,400]
 screen=pygame.display.set_mode(size)
@@ -34,7 +35,8 @@ class Snake:
         self.direction=''
 
     def draw(self):
-        for position in self.positions:
+        draw_block(screen,BLUE,self.positions[0])
+        for position in self.positions[1:]:
             draw_block(screen,GREEN,position)
 
     def move(self):
@@ -76,7 +78,7 @@ def runGame():
     apple=Apple()
 
     while not done:
-        clock.tick(10)
+        clock.tick(100)
         screen.fill(WHITE)
 
         for event in pygame.event.get():
@@ -109,6 +111,87 @@ def runGame():
                     snake.direction='S'
                 else:
                     snake.direction='N'
+            check=False
+            while(check==False):
+                print(snake.direction)
+                check=True
+                if snake.direction=='N':
+                    if (snake.positions[0][0],snake.positions[0][1]-1) in snake.positions or snake.positions[0][1]==0:
+                        plus_x=30
+                        minus_x=30
+                        for i in range(snake.positions[0][0]+1,20):
+                            if (i,snake.positions[0][1]) in snake.positions:
+                                plus_x=i-snake.positions[0][0]
+                                break
+                        for i in range(snake.positions[0][0]-1,-1,-1):
+                            if (i,snake.positions[0][1]) in snake.positions:
+                                minus_x=snake.positions[0][0]-i
+                                break
+                        if plus_x>minus_x:
+                            snake.direction='E'
+                        else:
+                            snake.direction='W'
+
+                        if snake.positions[0][0]==0 and (snake.positions[0][0]-1,snake.positions[0][1]) in snake.positions:
+                            snake.direction='E'
+                        check=False
+                if snake.direction=='S':
+                    if (snake.positions[0][0],snake.positions[0][1]+1) in snake.positions or snake.positions[0][1]==19:
+                        plus_x=30
+                        minus_x=30
+                        for i in range(snake.positions[0][0]+1,20):
+                            if (i,snake.positions[0][1]) in snake.positions:
+                                plus_x=i-snake.positions[0][0]
+                                break
+                        for i in range(snake.positions[0][0]-1,-1,-1):
+                            if (i,snake.positions[0][1]) in snake.positions:
+                                minus_x=snake.positions[0][0]-i
+                                break
+                        if plus_x>minus_x:
+                            snake.direction='E'
+                        else:
+                            snake.direction='W'
+                        if snake.positions[0][0]==19 or (snake.positions[0][0]+1,snake.positions[0][1]) in snake.positions:
+                            snake.direction='W'
+                        check=False
+                if snake.direction=='W':
+                    if (snake.positions[0][0]-1,snake.positions[0][1]) in snake.positions or snake.positions[0][0]==0:
+                        plus_y=30
+                        minus_y=30
+                        for i in range(snake.positions[0][1]+1,20):
+                            if (snake.positions[0][0],i) in snake.positions:
+                                plus_y=i-snake.positions[0][1]
+                                break
+                        for i in range(snake.positions[0][1]-1,-1,-1):
+                            if (snake.positions[0][0],i) in snake.positions:
+                                minus_y=snake.positions[0][1]-i
+                                break
+                        if plus_y>minus_y:
+                            snake.direction='S'
+                        else:
+                            snake.direction='N'
+                        if snake.positions[0][1]==0 or (snake.positions[0][0],snake.positions[0][1]-1) in snake.positions:
+                            snake.direction='S'
+                        check=False
+                if snake.direction=='E':
+                    if (snake.positions[0][0]+1,snake.positions[0][1]) in snake.positions or snake.positions[0][0]==19:
+                        plus_y=30
+                        minus_y=30
+                        for i in range(snake.positions[0][1]+1,20):
+                            if (snake.positions[0][0],i) in snake.positions:
+                                plus_y=i-snake.positions[0][1]
+                                break
+                        for i in range(snake.positions[0][1]-1,-1,-1):
+                            if (snake.positions[0][0],i) in snake.positions:
+                                minus_y=snake.positions[0][1]-i
+                                break
+                        if plus_y>minus_y:
+                            snake.direction='S'
+                        else:
+                            snake.direction='N'
+                        if snake.positions[0][1]==19 or (snake.positions[0][0],snake.positions[0][1]+1) in snake.positions:
+                            snake.direction='N'
+                        check=False
             snake.move()
 
         snake.draw()
